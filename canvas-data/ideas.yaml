@@ -1,0 +1,45 @@
+ideas:
+  active_direction:
+    - voice diary
+    - original and English transcripts
+    - source audio retention
+    - date-based browsing
+    - memory retrieval
+
+  next_possibilities:
+    - summaries
+    - memory search
+    - highlighted matching paragraphs
+    - typed diary
+    - calendar queries
+
+  later:
+    - knowledge graph
+    - entity and event detection
+    - attachment support
+    - reminders and special days
+    - mood and habit dashboards
+    - goals and progress
+    - time-use analysis
+    - mobile app
+    - remote access
+
+  high_care:
+    - doctor-facing life history
+    - mental-health pattern flags
+    - advice about daily actions
+
+  technology_options_seen:
+    - React
+    - Kotlin
+    - Java
+    - PostgreSQL
+    - vector database
+    - graph database
+    - Supabase
+    - local Docker
+    - Google APIs
+    - Whisper-like speech model
+    - SSH
+    - Tailscale
+    - WireGuard

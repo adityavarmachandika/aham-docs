@@ -1,0 +1,79 @@
+database_canvas:
+  entities:
+    users:
+      fields_seen:
+        - user_id
+        - id
+        - email
+        - password
+        - first_name
+        - last_name
+        - username_or_name
+        - age
+        - phone_number
+      open_notes:
+        - Relationship between id and user_id is unclear.
+        - Required profile fields are not fixed.
+
+    user_details:
+      fields_seen:
+        - user_reference
+        - nickname
+        - summary
+        - date_of_birth
+      open_notes:
+        - Notebook questions whether this split is needed initially.
+
+    transcriptions:
+      fields_seen:
+        - transcript_or_transcription_id
+        - user_id
+        - text
+        - created_at
+        - deleted_at_crossed_out
+      outputs_to_place:
+        - original transcript
+        - English translation
+        - summary
+
+    audio_records:
+      fields_seen: []
+      open_notes:
+        - Audio must be retained but the storage form is not defined.
+
+    attachments:
+      future: true
+      fields_seen:
+        - attachment_id
+        - entry_id
+        - attachment
+        - type
+        - size
+        - created_at
+      examples:
+        - link
+        - PDF
+        - image
+        - audio
+
+    sessions:
+      fields_seen:
+        - session_id
+        - user_id
+        - refresh_token_hash
+        - expires_at
+        - device
+        - ip_address
+
+  storage_layers:
+    - PostgreSQL
+    - vector storage
+    - knowledge graph
+    - audio and attachment storage
+
+  not_defined:
+    - final table names
+    - data types
+    - constraints
+    - migration order
+    - retention and deletion rules

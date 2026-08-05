@@ -1,0 +1,44 @@
+source_pages:
+  - page: 1
+    file: photo_6309770754622428021_y.jpg
+    themes: [profile, login, audio, transcription, translation, summary, retrieval]
+
+  - page: 2
+    file: photo_6309770754622428023_y.jpg
+    themes: [version 1, source audio, original text, English text, memory search]
+
+  - page: 3
+    file: photo_6309770754622428024_y.jpg
+    themes: [assistant, second brain, memory connections, health ideas, dashboards]
+
+  - page: 4
+    file: photo_6309770754622428025_y.jpg
+    themes: [local operation, mixed language, search, mood, habits, goals]
+
+  - page: 5
+    file: photo_6309770754622428016_y.jpg
+    themes: [calendar queries, graph evolution, events, attachments, user database]
+
+  - page: 6
+    file: photo_6309770754622428017_y.jpg
+    themes: [Gmail sign-in, audio pipeline, SQL, vector, knowledge graph]
+
+  - page: 7
+    file: photo_6309770754622428018_y.jpg
+    themes: [remote access, registration, OTP, login token]
+
+  - page: 8
+    file: photo_6309770754622428019_y.jpg
+    themes: [database choices, React, Kotlin, Java, AI models]
+
+  - page: 9
+    file: photo_6309770754622428020_y.jpg
+    themes: [data flow, registration, login, audio service, search highlighting]
+
+  - page: 10
+    file: photo_6309770754622428022_y.jpg
+    themes: [context diagram, profile, voice diary, typed diary, search]
+
+  - page: 11
+    file: photo_6309770754622428015_y.jpg
+    themes: [transcriptions, attachments, sessions, Supabase, local Docker]

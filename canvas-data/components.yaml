@@ -1,0 +1,32 @@
+components:
+  - name: Web interface
+    notebook_direction: React
+    purpose: Capture and browse memories
+
+  - name: Mobile application
+    notebook_direction: Kotlin mentioned
+    purpose: Possible later mobile experience
+
+  - name: Backend service
+    notebook_direction: Java
+    purpose: Accounts, memory workflows, retrieval, and storage coordination
+
+  - name: AI processing
+    notebook_direction: Speech and language models
+    purpose: Transcription, translation, summary, and later entity detection
+
+  - name: Relational storage
+    notebook_direction: PostgreSQL
+    purpose: Users, sessions, entries, transcripts, and metadata
+
+  - name: Vector search
+    notebook_direction: Vector database or vector capability
+    purpose: Semantic memory retrieval
+
+  - name: Knowledge graph
+    notebook_direction: Graph database or graph layer
+    purpose: Connected memories, people, events, habits, and goals
+
+  - name: File storage
+    notebook_direction: Not selected
+    purpose: Original audio and future attachments

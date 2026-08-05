@@ -1,0 +1,31 @@
+project:
+  name: AHAM
+  description: Personal memory and second-brain canvas
+  style: living GitBook canvas
+  source: handwritten notebook pages
+
+current_picture:
+  main_input:
+    - voice diary
+    - typed diary as a possible companion
+  memory_outputs:
+    - original transcript
+    - English translation
+    - quick summary as a possible output
+    - original audio
+  retrieval:
+    - date order
+    - calendar range
+    - one full memory
+    - memory search
+  longer_direction:
+    - vector search
+    - connected memory graph
+    - personal patterns and dashboards
+
+canvas_principles:
+  - Keep pages readable and visual.
+  - Add ideas gradually.
+  - Do not turn the canvas into a task tracker.
+  - Do not silently decide unclear notebook details.
+  - Keep future ideas visible without presenting them as built features.
