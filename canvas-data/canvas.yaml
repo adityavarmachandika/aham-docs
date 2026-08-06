@@ -1,62 +1,50 @@
 project:
   name: AHAM
-  description: Public personal-diary and memory companion built incrementally
-  style: living GitBook canvas
-  source: handwritten notebook pages
+  development_model: phased and incremental
 
-experience:
-  visible_metaphor: diary or trusted friend
-  avoid_as_primary_metaphor: technical second brain
-  long_term_interaction: conversational voice with relevant AI follow-up
+phases:
+  phase_1:
+    version: 1
+    name: ADI
+    expanded_name: Audio Diary Initiative
+    scope: diary product and application foundation
+    includes:
+      - diary CRUD foundation
+      - audio upload or recording
+      - typed diary
+      - original transcript
+      - English translation
+      - original audio retention
+      - date browsing
+      - keyword search
+      - users and profiles
+      - email OTP registration
+      - username or email login
+      - sessions
+      - soft deletion
+      - database design
+      - API contracts
+    unresolved:
+      - exact update or editing boundary
+      - audio upload versus streaming priority
+      - processing mode
+      - date model
+      - user field requirements
+      - purge lifecycle
 
-version_1:
-  capture:
-    - audio upload or recording
-    - typed diary
-  outputs:
-    - original transcript
-    - English translation
-    - original audio
-  retrieval:
-    - browse by date
-    - open and view one diary item
-    - keyword search
-  current_limits:
-    - editing disabled
-    - summary not included in the clarified promise
-    - semantic search later
-    - knowledge graph later
+  phase_2:
+    name: Second Brain
+    starts_after: ADI foundation is complete
+    includes:
+      - semantic or vector search
+      - knowledge graph
+      - connected memories
+      - entities and relationships
+      - personal patterns
+      - dashboards
+      - proactive insights
 
-accounts:
-  build_order: after core diary functionality during version 1
-  email_required: true
-  registration: email OTP verification
-  login_identifiers:
-    - username
-    - email
-  login_secret: password
-
-lifecycle:
-  deletion: soft delete
-  backdated_entry: allowed
-  multiple_days_per_entry: allowed
-  display_timezone: user device timezone
-
-ai_direction:
-  current: Google or another free audio-processing API when suitable
-  future: local model
-  preserve_uncertainty:
-    - transcription confidence
-    - other model uncertainties
-  streaming: strong direction but exact version 1 boundary remains open
-
-hosting:
-  preferred: friend's home system if practical
-  fallback: cloud
-
-canvas_principles:
-  - Keep pages readable and visual.
-  - Add ideas gradually.
-  - Do not turn the canvas into a task tracker.
-  - Do not silently decide unclear notebook details.
-  - Keep future ideas visible without presenting them as built features.
+boundary:
+  - Phase 1 may preserve stable IDs for future references.
+  - Phase 1 does not implement Phase 2 behavior.
+  - Unclear decisions are not silently completed.

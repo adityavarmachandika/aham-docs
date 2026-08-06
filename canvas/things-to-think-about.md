@@ -1,57 +1,76 @@
 # Things to Think About
 
-Most of the base product direction is now clearer. These are the remaining choices that affect database design, API contracts, or the first public deployment.
+The project boundary is now clear:
 
-## Name and resource shape
+- **Phase 1 / Version 1:** ADI — Audio Diary Initiative.
+- **Phase 2:** second-brain features.
 
-- What simple user-facing word should represent one saved diary item: **Diary**, **Diary entry**, **Journal**, or another word?
-- What stable internal resource name should the database and API use?
+The following choices remain before the Phase 1 database and API contracts can be finalized.
 
-## Conversation and audio
+## CRUD update boundary — highest priority
 
-- Is the conversational follow-up experience part of Version 1, or the next increment after the base diary flow?
-- Does Version 1 upload a completed recording, stream live audio, or support both?
-- Is audio processing synchronous, asynchronous, or mixed?
-- What are the accepted formats, maximum file size, and maximum duration?
-- How are partial transcripts, retries, provider failure, and disconnected streams handled?
+Earlier notes disabled editing, while the latest clarification says Phase 1 includes all CRUD foundations.
+
+Confirm what `UPDATE` means in ADI:
+
+- edit typed diary content;
+- edit diary date or title only;
+- edit original transcript;
+- edit English translation;
+- replace audio;
+- restore a soft-deleted entry;
+- or expose an internal update model while initially hiding editing in the UI.
+
+## Main diary resource
+
+- Final user-facing name: Diary, Diary entry, Journal, or something else?
+- Final internal API and table name?
+
+## Audio and processing
+
+- Completed upload, live streaming, or both?
+- Which comes first?
+- Synchronous, asynchronous, or mixed processing?
+- Accepted audio formats?
+- Maximum duration and file size?
+- Retry, partial transcript, and provider-failure behavior?
 
 ## Text outputs
 
 - Is the original transcript verbatim or cleaned?
-- Is the English output a direct translation or a rewritten readable form?
-- Is summary generation explicitly excluded from Version 1?
-- Where is transcription confidence stored: whole transcript, segment, or word level?
-- Which store owns the canonical English text, and what do vector or graph stores copy?
+- Is English a direct translation or a readable rewrite?
+- Is confidence stored for the full transcript, segments, or words?
+- Is summary definitely outside ADI?
 
-## Dates and time
+## Dates
 
-- Store timestamps in UTC and display them in the device timezone, or store another representation?
-- Does a diary item need a separate user-selected diary date in addition to creation time?
-- How should one item covering multiple days be represented?
-- Can automatic date detection be corrected when it is wrong?
+- UTC storage plus device-timezone display?
+- Separate creation time and diary date?
+- Date range or separate covered-date rows for multi-day entries?
+- Can automatic date detection be corrected?
 
 ## Users and authentication
 
-- Which profile fields are required at registration and which are optional later?
-- Must usernames be unique, and are they case-sensitive?
-- What are the password, OTP expiry, retry, and account-recovery rules?
-- Which session model is used for the public product?
+- Required and optional profile fields?
+- Username uniqueness, casing, and character rules?
+- Password policy?
+- OTP expiry and retry limits?
+- Password reset and account recovery?
+- Session and refresh-token behavior?
 
-## Editing and deletion
+## Soft delete
 
-- Editing is disabled now, but should the schema reserve text-version history for later?
-- How long can a soft-deleted item be restored?
-- When and how is permanent purge performed?
-- Does purge remove audio, text, search indexes, and future graph data together?
+- Restore period?
+- User-visible recycle bin?
+- Permanent purge schedule?
+- Purge of audio and all derived data together?
 
 ## Hosting and privacy
 
-- Can the friend's home system provide reliable public networking, TLS, backups, uptime, and storage durability?
-- What is the cloud fallback provider?
-- What personal data may be sent to the current external audio API?
-- Are audio and diary text encrypted at rest?
-- How can a user export all diary data?
+- Can the home host support public TLS, backups, uptime, monitoring, and durable file storage?
+- What is the exact cloud fallback?
+- What audio or text may leave the host for the external AI API?
+- Encryption at rest?
+- Full user export?
 
-## Later graph design
-
-The knowledge graph can wait until the base diary and keyword search are proven. Before it starts, define the first node types, relationship types, correction flow, and confidence rules.
+Once these Phase 1 decisions are made, detailed database design and API contracts can proceed without bringing Phase 2 into the scope.

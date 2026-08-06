@@ -1,61 +1,66 @@
 # Feature Map
 
-## Version 1 capture
+## Phase 1 — ADI
+
+### Diary input
 
 - Upload audio.
 - Record audio.
 - Typed diary.
-- Add an entry for an earlier date.
-- Allow one diary item to describe more than one day.
+- Backdated diary entry.
+- Diary entry covering multiple days.
 
-## Version 1 processing
+### Diary processing
 
 - Original-language transcription.
 - English translation.
-- Preserve transcription confidence or other uncertainty information.
-- Keep the original audio.
+- Transcription confidence or uncertainty.
+- Original audio retention.
 
-## Version 1 browse and search
+### Diary CRUD
 
-- Browse diary entries by date.
-- Open and view one entry.
-- Keyword search.
+- Create an entry.
+- List and view entries.
+- Update within a boundary still to be confirmed.
 - Soft delete.
+- Restore and permanent-purge rules still to be defined.
 
-Editing is disabled initially. Open-and-edit remains a later conditional feature.
+### Diary retrieval
 
-## Account access
+- Browse by date.
+- Open one entry.
+- Keyword search.
 
+### Application foundation
+
+- User profile.
 - Mandatory email.
-- Email OTP during registration.
-- Login with username and password or email and password.
-- Account functionality is developed after the core diary flow.
+- Email OTP registration.
+- Username/password or email/password login.
+- Sessions.
+- File storage.
+- Processing states and retries.
+- Database schema.
+- API contracts.
 
-## Conversation direction
+### Diary interaction direction
 
-- AI asks a natural opening question.
-- The user answers by voice.
-- AI asks a relevant follow-up based on what was said.
-- Streaming may support the real-person feeling.
+- AI may ask a natural opening question.
+- The user may answer by voice.
+- AI may ask a relevant follow-up.
+- Streaming remains an implementation choice to settle inside the diary phase.
 
-## Personal memory model later
+## Phase 2 — Second brain
 
 - Semantic or vector search.
-- Connect related diary entries.
-- Show how strongly memories are connected.
-- Build a knowledge graph gradually.
-- Detect events, entities, and relationships.
-
-## Personal insights later
-
-- Mood tracking.
-- Habit correlations.
-- Sleep, workouts, screen time, coffee, and water.
-- Time-use view.
-- Goals and progress.
+- Knowledge graph.
+- Related-memory discovery.
+- People, places, event, habit, topic, and goal connections.
+- Mood and habit correlations.
+- Time-use and goal dashboards.
 - Important-day reminders.
-- Dashboards for mood and comparable items.
+- Proactive second-brain assistance.
 
-## High-care ideas
+## Higher-care later ideas
 
-Doctor review and early mental-health signals remain vision ideas, not current product promises. They need privacy, consent, safety, and professional-boundary decisions first.
+Doctor-facing history and mental-health signals remain future concepts requiring explicit privacy, consent, safety, and professional boundaries.

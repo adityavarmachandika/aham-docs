@@ -1,51 +1,44 @@
 # Database Overview
 
-The database canvas separates the original diary record from the later search and knowledge layers.
+The current database design is for **Phase 1: ADI — Audio Diary Initiative**.
+
+Its job is to provide a reliable diary source of truth and the CRUD foundation of the application. Phase 2 vector and graph models should not drive the Phase 1 schema prematurely.
 
 ```mermaid
 flowchart LR
-    APP[AHAM services] --> SQL[(Relational source of truth)]
+    APP[ADI services] --> SQL[(PostgreSQL diary source of truth)]
     APP --> OBJ[(Original audio storage)]
-    SQL --> VEC[(Semantic vectors later)]
-    SQL --> KG[(Memory graph later)]
+    SQL -. Phase 2 references later .-> VEC[(Vector search)]
+    SQL -. Phase 2 references later .-> KG[(Knowledge graph)]
 ```
 
-## Diary concept
+## Phase 1 data areas
 
-The user-facing product should use a simple diary-oriented name. Internally, the database and API still need a stable resource name. `DIARY_ENTRY` is used in this canvas only as a working concept, not as a final table decision.
+- users and profiles;
+- email verification;
+- credentials and sessions;
+- diary entries;
+- diary dates and multi-day coverage;
+- typed content;
+- original transcripts;
+- English translations;
+- confidence information;
+- original audio metadata and file references;
+- processing jobs and failure states;
+- keyword-search support;
+- soft deletion and later purge.
 
-## Relational source of truth
-
-Useful for:
-
-- users and sessions;
-- diary items and their dates;
-- original transcript;
-- English translation;
-- processing status and confidence;
-- soft deletion;
-- references to original audio.
-
-## English representation across layers
-
-The latest note asks for English text to be available across the database or memory layers because it can support future ideas. Database design still needs to decide whether:
-
-- PostgreSQL owns the canonical English text and other layers reference it;
-- derived stores copy only the fragments they need;
-- full English text is duplicated in each store.
-
-No duplication strategy is assumed here.
-
-## Visual entity map
+## Working visual model
 
 ```mermaid
 erDiagram
     USER ||--o{ SESSION : has
     USER ||--o{ DIARY_ENTRY : owns
-    DIARY_ENTRY ||--o{ TEXT_VERSION : contains
+    USER ||--o{ EMAIL_VERIFICATION : verifies
+    DIARY_ENTRY ||--o{ TEXT_OUTPUT : contains
     DIARY_ENTRY ||--o| AUDIO_RECORD : keeps
     DIARY_ENTRY ||--o{ COVERED_DATE : may_cover
-    DIARY_ENTRY ||--o{ ATTACHMENT : includes_later
+    DIARY_ENTRY ||--o{ PROCESSING_JOB : processes
 
     USER {
       string user_id
@@ -55,12 +48,12 @@ erDiagram
 
     DIARY_ENTRY {
       string entry_id
+      string input_kind
       datetime created_at
       datetime deleted_at
-      string input_kind
     }
 
-    TEXT_VERSION {
+    TEXT_OUTPUT {
       string text_id
       string text_kind
       text content
@@ -68,4 +61,8 @@ erDiagram
     }
 ```
 
-`DIARY_ENTRY`, `TEXT_VERSION`, and `COVERED_DATE` are discussion concepts for the upcoming schema design. Their final names and shapes require confirmation.
+These names remain working concepts until the detailed schema is approved.
+
+## Phase 2 boundary
+
+Vector embeddings and graph entities may later reference stable Phase 1 diary IDs. They do not need to be implemented during ADI.

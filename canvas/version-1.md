@@ -1,55 +1,74 @@
-# Version 1
+# Version 1 — ADI
 
-Version 1 is the base public product setup. It will be built incrementally rather than attempting the complete second-brain vision at once.
+Version 1 is **Phase 1: ADI — Audio Diary Initiative**.
 
-## User experience
+Its purpose is to build the complete diary foundation of AHAM. Phase 2 second-brain features are intentionally outside this version.
+
+## ADI flow
 
 ```mermaid
 flowchart LR
-    A[Upload or record audio] --> B[Create original transcript]
-    A --> C[Keep original audio]
-    B --> D[Create English translation]
-    D --> E[Save diary entry]
-    C --> E
-    T[Typed diary] --> E
-    E --> F[Browse by date]
-    E --> G[Open and view]
-    E --> H[Keyword search]
+    A[Create diary entry] --> B{Input type}
+    B -->|Audio| C[Upload or record]
+    B -->|Typed| D[Typed diary]
+    C --> E[Original transcript]
+    C --> F[Keep original audio]
+    E --> G[English translation]
+    D --> H[Store diary entry]
+    F --> H
+    G --> H
+    H --> I[Browse and list]
+    H --> J[View one entry]
+    H --> K[Keyword search]
+    H --> L[Update within approved scope]
+    H --> M[Soft delete]
 ```
 
-## Version 1 promise
+## Version 1 scope
 
-- Audio upload or recording.
-- Typed diary.
-- Original transcript.
-- English translation.
-- Original audio retention.
-- Browse entries by date.
+### Diary CRUD foundation
+
+- Create audio or typed diary entries.
+- Read lists and individual entries.
+- Update diary data within a boundary that still needs confirmation.
+- Soft delete entries.
+- Define restore and permanent-purge behavior.
+
+### Diary processing
+
+- Upload or record audio.
+- Store original audio.
+- Store original transcript.
+- Store English translation.
+- Preserve confidence or uncertainty information.
+
+### Diary retrieval
+
+- Browse by date.
+- Add entries for earlier dates.
+- Support entries covering multiple days.
 - Open and view one entry.
 - Keyword search.
 
-## Current limits
+### Application foundation
 
-- Editing is disabled.
-- Open-and-edit may be added later if required.
-- Deletion uses soft delete rather than immediate permanent removal.
-- Summary generation is not currently listed as part of the agreed Version 1 promise.
-- Semantic search and the knowledge graph remain later stages.
+- Users and profiles.
+- Email OTP registration.
+- Username/email and password login.
+- Sessions.
+- Processing jobs and failure handling.
+- File storage.
+- Database design.
+- API contracts.
 
-## Build sequence
+## Explicitly Phase 2
 
-The main diary functionality comes first. Registration and login are built afterward within the Version 1 development cycle.
+- Vector or semantic search.
+- Knowledge graph.
+- Connected-memory graph.
+- Mood and habit pattern analysis.
+- Personal dashboards and second-brain insights.
 
-Before the product is public, the account flow should support:
+## Current conflict to resolve
 
-- mandatory email;
-- OTP verification during registration;
-- login using username and password or email and password.
-
-## Conversation direction
-
-The desired end experience is a natural voice conversation where the AI asks relevant follow-up questions. Streaming is a strong direction for that experience, but it is not yet confirmed whether the first Version 1 implementation must be live streaming or can begin with recorded audio upload.
-
-## Hosting
-
-Prefer hosting on a friend's home system if it is practical and reliable. Use cloud hosting otherwise.
+Earlier clarification disabled editing, while the latest Phase 1 statement includes all CRUD foundations. The exact update behavior must be confirmed rather than guessed.

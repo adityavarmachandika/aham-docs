@@ -1,67 +1,46 @@
 # Current Direction
 
-The latest notebook pages clear up much of the base product direction.
+## Development phases
 
-## Product shape
+### Phase 1 / Version 1 — ADI
 
-- Version 1 is the base project setup.
-- Development will be incremental.
+**ADI — Audio Diary Initiative** is the current development phase.
+
+All Phase 1 development is related to the diary product and the foundation of the application. It includes the CRUD, authentication, storage, processing, and API capabilities required to make the diary dependable.
+
+### Phase 2 — Second brain
+
+Second-brain functionality begins only after ADI is complete. This includes semantic search, knowledge graphs, connected memories, personal patterns, dashboards, reminders, and deeper insights.
+
+## ADI product shape
+
 - The product is intended to become public as it matures.
-- The user-facing experience should feel like a diary or a trusted friend, not like a technical “second brain.”
-- The internal database or API name can be different from the simple name shown to users.
+- The experience should feel like a diary or trusted friend.
+- Audio and typed diary input are part of the base.
+- Original audio, original transcript, and English translation are retained.
+- Entries can be browsed by date, viewed individually, and searched by keyword.
+- Backdated and multi-day entries are supported conceptually.
+- Soft deletion is required.
+- User accounts and authentication are part of the Phase 1 foundation.
 
-## Version 1 promise
-
-- Upload or record audio.
-- Add a typed diary entry.
-- Store the original transcript.
-- Store an English translation.
-- Keep the original audio.
-- Browse diary entries by date.
-- Open and view one diary entry.
-- Search by keyword.
-
-Editing is disabled for now. Opening and editing an entry may be added later if it becomes necessary.
-
-## Conversation direction
-
-The long-term interaction should feel like a real conversation:
-
-1. The AI asks a natural question.
-2. The user answers by voice.
-3. The AI asks a relevant follow-up based on the answer.
-4. The conversation becomes the diary material.
-
-Streaming appears important for this experience, but the exact Version 1 transport is not yet fixed.
-
-## Audio and AI direction
-
-- For the current stage, a Google or other free API may process audio when a suitable streaming option is available.
-- The future aim is to use a local model.
-- Generated output should retain uncertainty information such as transcription confidence.
-
-## Authentication direction
+## ADI account direction
 
 - Email is mandatory.
 - Registration uses email OTP verification.
-- Login may use either username and password or email and password.
-- Login and registration will be built after the main diary functionality during Version 1 development.
+- Login may use username/password or email/password.
+- Authentication is developed after the core diary flow, but remains inside Phase 1.
 
-## Diary time behavior
+## ADI AI direction
 
-- A user can add a diary entry for an earlier date.
-- Entries are stored with timestamps.
-- Times should be displayed in the timezone of the user's device.
-- One diary entry may cover multiple days.
-- Detecting the covered dates automatically is preferred; explicit user-provided dates are the fallback. The exact input and storage shape still needs to be designed.
+- An external Google or other free API may be used initially for audio processing.
+- A local model is a later direction.
+- Transcription confidence and uncertainty should be retained.
+- Conversational follow-up and streaming are diary-experience possibilities, but their exact Phase 1 increment is still to be decided.
 
-## Data behavior
+## CRUD clarification still required
 
-- Editing diary entries is disabled at the current stage.
-- Entries are not deleted immediately; soft delete is used.
-- User information is needed because AHAM is intended to understand the person over time. The exact required profile fields are still to be selected.
-- The notebook asks for an English representation to be available across the database or memory layers because it may help future ideas. The canonical source and duplication strategy still need to be chosen during database design.
+The project now states that Phase 1 covers CRUD foundations. An earlier note said editing is disabled. The update boundary must therefore be confirmed before database and API contracts are finalized.
 
 ## Hosting direction
 
-The preferred first host is a friend's home system if practical. Cloud hosting is the fallback.
+Prefer a friend's home system if practical and reliable. Cloud hosting is the fallback.
