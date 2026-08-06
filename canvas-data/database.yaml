@@ -1,79 +1,94 @@
 database_canvas:
-  entities:
-    users:
-      fields_seen:
-        - user_id
-        - id
+  source_of_truth:
+    direction: PostgreSQL
+
+  user:
+    confirmed:
+      email_required: true
+      registration_verification: email OTP
+      login_identifiers:
+        - username
         - email
-        - password
-        - first_name
-        - last_name
-        - username_or_name
-        - age
-        - phone_number
-      open_notes:
-        - Relationship between id and user_id is unclear.
-        - Required profile fields are not fixed.
+      login_secret: password
+    fields_seen:
+      - user_id_or_id
+      - username
+      - email
+      - password
+      - first_name
+      - last_name
+      - age_or_date_of_birth
+      - phone_number
+      - nickname
+      - profile_summary
+    unresolved:
+      - required versus optional fields
+      - id versus user_id
+      - username rules
 
-    user_details:
-      fields_seen:
-        - user_reference
-        - nickname
-        - summary
-        - date_of_birth
-      open_notes:
-        - Notebook questions whether this split is needed initially.
+  diary_item:
+    user_facing_name: not_final
+    working_internal_name: diary_entry
+    confirmed_behavior:
+      - audio or typed input
+      - backdated entry allowed
+      - may cover multiple days
+      - original audio retained
+      - original transcript stored
+      - English translation stored
+      - keyword searchable
+      - editing disabled initially
+      - soft deletion
+    possible_fields:
+      - entry_id
+      - user_id
+      - input_kind
+      - created_at
+      - diary_date
+      - covered_date_range_or_dates
+      - audio_reference
+      - deleted_at
+    unresolved:
+      - final resource and table name
+      - exact multi-day representation
+      - UTC and timezone field strategy
 
-    transcriptions:
-      fields_seen:
-        - transcript_or_transcription_id
-        - user_id
-        - text
-        - created_at
-        - deleted_at_crossed_out
-      outputs_to_place:
-        - original transcript
-        - English translation
-        - summary
+  text_outputs:
+    version_1:
+      - original transcript
+      - English translation
+    uncertainty:
+      - transcription confidence
+    unresolved:
+      - canonical text record shape
+      - segment or word confidence
+      - English duplication across storage layers
 
-    audio_records:
-      fields_seen: []
-      open_notes:
-        - Audio must be retained but the storage form is not defined.
+  audio_record:
+    retained: true
+    unresolved:
+      - metadata fields
+      - filesystem versus object storage
+      - maximum duration and size
 
-    attachments:
-      future: true
-      fields_seen:
-        - attachment_id
-        - entry_id
-        - attachment
-        - type
-        - size
-        - created_at
-      examples:
-        - link
-        - PDF
-        - image
-        - audio
+  sessions:
+    fields_seen:
+      - session_id
+      - user_id
+      - refresh_token_hash
+      - expires_at
+      - device
+      - ip_address
 
-    sessions:
-      fields_seen:
-        - session_id
-        - user_id
-        - refresh_token_hash
-        - expires_at
-        - device
-        - ip_address
-
-  storage_layers:
-    - PostgreSQL
-    - vector storage
+  later_layers:
+    - vector search
     - knowledge graph
-    - audio and attachment storage
+    - attachments
 
   not_defined:
     - final table names
     - data types
     - constraints
-    - migration order
-    - retention and deletion rules
+    - indexes
+    - retention period
+    - permanent purge behavior

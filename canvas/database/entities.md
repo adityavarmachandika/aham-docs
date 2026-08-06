@@ -1,57 +1,72 @@
 # Database Entities
 
-This page records the database shapes visible in the notebook without turning them into migrations.
+This page records the shapes now visible before the detailed schema is designed.
 
-## Users
+## User
 
-Fields mentioned across pages:
+Confirmed direction:
 
-- `user_id`
-- `id`
-- `email` or `mail`
-- `password`
-- `first_name`
-- `last_name`
-- `name` or `username`
-- `age`
-- `phone_number`
+- email is mandatory;
+- registration uses email OTP;
+- login supports username/password or email/password;
+- user details are needed to understand the person over time.
 
-`id` and `user_id` may mean the same thing or different things. The notebook does not settle it.
+Fields mentioned across the notebook:
 
-## User details
+- `user_id` or `id`;
+- `username`;
+- `email`;
+- `password`;
+- `first_name`;
+- `last_name`;
+- `age` or `date_of_birth`;
+- `phone_number`;
+- `nickname`;
+- `profile_summary`.
 
-A possible separate area contains:
+The required subset, optional subset, and the relationship between `id` and `user_id` are not yet finalized.
 
-- nickname;
-- summary;
-- date of birth;
-- extra fields only when required.
+## Diary item
 
-Another note suggests keeping commonly fetched data together initially instead of splitting it too early.
+The visible product should call the concept something simple and diary-oriented. A working internal concept may contain:
 
-## Transcriptions
+- owner or user ID;
+- input kind: audio or typed;
+- created timestamp;
+- user-selected diary date;
+- one or more covered dates;
+- original audio reference;
+- original transcript;
+- English translation;
+- transcription confidence;
+- soft-delete timestamp.
 
-Fields sketched:
+A user may add an item for an earlier date. One item may cover multiple days. The exact date fields and automatic date detection rules still need design.
 
-- transcript or transcription ID;
-- user ID;
-- text;
-- created-at time;
-- `deleted_at`, crossed out in the notebook.
+## Text forms
 
-The notebook also requires original text, English translation, and possibly a summary, but it does not decide whether these are columns, separate records, or files.
+The Version 1 outputs are:
 
-## Audio records
+- original transcript;
+- English translation.
 
-Audio must be saved, but no field list or storage model is written.
+A future model may also create summaries or corrected versions. Editing is currently disabled, so a user-edited text version is not required for the initial schema unless it is kept for future compatibility.
+
+## Audio record
+
+Original audio is retained. The database needs metadata and a reference to where the file is stored. Exact audio metadata fields are not yet selected.
+
+## Soft deletion
+
+Entries are not removed immediately. A soft-delete mechanism is required. Restore period and permanent purge behavior are still open.
 
 ## Attachments
 
-Future fields sketched:
+Later fields sketched:
 
 - attachment ID;
-- entry ID;
-- attachment;
+- diary item reference;
+- attachment reference;
 - type;
 - size;
 - created-at time.

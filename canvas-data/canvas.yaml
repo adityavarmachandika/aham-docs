@@ -1,27 +1,58 @@
 project:
   name: AHAM
-  description: Personal memory and second-brain canvas
+  description: Public personal-diary and memory companion built incrementally
   style: living GitBook canvas
   source: handwritten notebook pages
 
-current_picture:
-  main_input:
-    - voice diary
-    - typed diary as a possible companion
-  memory_outputs:
+experience:
+  visible_metaphor: diary or trusted friend
+  avoid_as_primary_metaphor: technical second brain
+  long_term_interaction: conversational voice with relevant AI follow-up
+
+version_1:
+  capture:
+    - audio upload or recording
+    - typed diary
+  outputs:
     - original transcript
     - English translation
-    - quick summary as a possible output
     - original audio
   retrieval:
-    - date order
-    - calendar range
-    - one full memory
-    - memory search
-  longer_direction:
-    - vector search
-    - connected memory graph
-    - personal patterns and dashboards
+    - browse by date
+    - open and view one diary item
+    - keyword search
+  current_limits:
+    - editing disabled
+    - summary not included in the clarified promise
+    - semantic search later
+    - knowledge graph later
+
+accounts:
+  build_order: after core diary functionality during version 1
+  email_required: true
+  registration: email OTP verification
+  login_identifiers:
+    - username
+    - email
+  login_secret: password
+
+lifecycle:
+  deletion: soft delete
+  backdated_entry: allowed
+  multiple_days_per_entry: allowed
+  display_timezone: user device timezone
+
+ai_direction:
+  current: Google or another free audio-processing API when suitable
+  future: local model
+  preserve_uncertainty:
+    - transcription confidence
+    - other model uncertainties
+  streaming: strong direction but exact version 1 boundary remains open
+
+hosting:
+  preferred: friend's home system if practical
+  fallback: cloud
 
 canvas_principles:
   - Keep pages readable and visual.

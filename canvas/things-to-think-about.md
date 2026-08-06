@@ -1,46 +1,57 @@
 # Things to Think About
 
-These are weak or unclear areas visible from the notebook. They are discussion notes, not automatic redesigns.
+Most of the base product direction is now clearer. These are the remaining choices that affect database design, API contracts, or the first public deployment.
 
-## Scope
+## Name and resource shape
 
-- Is memory search part of the first version or the next step?
-- Is summary generation essential at the beginning?
-- Is typed diary part of the base or a later feature?
-- Does “everything local” mean mandatory local-only operation?
+- What simple user-facing word should represent one saved diary item: **Diary**, **Diary entry**, **Journal**, or another word?
+- What stable internal resource name should the database and API use?
 
-## Audio
+## Conversation and audio
 
-- Whole-file upload, chunking, or streaming?
-- Synchronous or asynchronous processing?
-- Where is the source audio stored?
-- Which Telugu-English speech model is intended?
+- Is the conversational follow-up experience part of Version 1, or the next increment after the base diary flow?
+- Does Version 1 upload a completed recording, stream live audio, or support both?
+- Is audio processing synchronous, asynchronous, or mixed?
+- What are the accepted formats, maximum file size, and maximum duration?
+- How are partial transcripts, retries, provider failure, and disconnected streams handled?
 
-## Authentication
+## Text outputs
 
-- Email and password, email OTP, Gmail sign-in, or more than one?
-- Is login by email, user ID, or both?
-- Which profile fields are required?
+- Is the original transcript verbatim or cleaned?
+- Is the English output a direct translation or a rewritten readable form?
+- Is summary generation explicitly excluded from Version 1?
+- Where is transcription confidence stored: whole transcript, segment, or word level?
+- Which store owns the canonical English text, and what do vector or graph stores copy?
 
-## Database
+## Dates and time
 
-- Should voice and typed memories share one common entry concept?
-- Are original transcript, English translation, and summary versions of one text or separate records?
-- Should `user_details` exist immediately?
-- What did the crossed-out `deleted_at` mean?
-- What does attachment `entry_id` point to?
-- Which relational, vector, graph, and file-storage products work together?
+- Store timestamps in UTC and display them in the device timezone, or store another representation?
+- Does a diary item need a separate user-selected diary date in addition to creation time?
+- How should one item covering multiple days be represented?
+- Can automatic date detection be corrected when it is wrong?
 
-## Knowledge graph
+## Users and authentication
 
-- Which entity and relationship types exist?
-- How is connection strength calculated?
-- When does confidence require approval?
-- Who or what can change the graph schema?
+- Which profile fields are required at registration and which are optional later?
+- Must usernames be unique, and are they case-sensitive?
+- What are the password, OTP expiry, retry, and account-recovery rules?
+- Which session model is used for the public product?
 
-## Privacy and safety
+## Editing and deletion
 
-- How are deeply personal memories protected?
-- What is the retention and deletion model?
-- How should health or mental-health insights avoid false confidence?
-- What data can leave a local device when external AI services are used?
+- Editing is disabled now, but should the schema reserve text-version history for later?
+- How long can a soft-deleted item be restored?
+- When and how is permanent purge performed?
+- Does purge remove audio, text, search indexes, and future graph data together?
+
+## Hosting and privacy
+
+- Can the friend's home system provide reliable public networking, TLS, backups, uptime, and storage durability?
+- What is the cloud fallback provider?
+- What personal data may be sent to the current external audio API?
+- Are audio and diary text encrypted at rest?
+- How can a user export all diary data?
+
+## Later graph design
+
+The knowledge graph can wait until the base diary and keyword search are proven. Before it starts, define the first node types, relationship types, correction flow, and confidence rules.

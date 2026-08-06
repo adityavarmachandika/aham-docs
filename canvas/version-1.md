@@ -1,45 +1,55 @@
 # Version 1
 
-The notebook describes a small first version before the larger second-brain vision.
+Version 1 is the base public product setup. It will be built incrementally rather than attempting the complete second-brain vision at once.
 
-## Core experience
+## User experience
 
 ```mermaid
 flowchart LR
-    A[Create account or sign in] --> B[Send an audio diary]
-    B --> C[Create original transcript]
-    C --> D[Create English translation]
-    B --> E[Keep original audio]
-    C --> F[Store memory by date]
-    D --> F
-    E --> F
-    F --> G[Browse memories]
-    F --> H[Open one memory]
+    A[Upload or record audio] --> B[Create original transcript]
+    A --> C[Keep original audio]
+    B --> D[Create English translation]
+    D --> E[Save diary entry]
+    C --> E
+    T[Typed diary] --> E
+    E --> F[Browse by date]
+    E --> G[Open and view]
+    E --> H[Keyword search]
 ```
 
-## A reasonable first canvas
+## Version 1 promise
 
-These items are clearly present in the notebook as the base direction:
-
-- User registration and login.
-- User profile details.
-- Audio input such as MP3 or WAV.
-- Transcription of Telugu, English, or mixed speech.
-- English translation.
-- Storage of original audio and text outputs.
-- Date-based ordering.
-- Viewing stored memories.
-- Retrieving an individual memory.
-
-## Near the edge of Version 1
-
-The notebook mentions these, but their placement is not fully clear:
-
-- Quick summaries.
-- Memory search.
-- Email OTP.
-- Gmail sign-in.
+- Audio upload or recording.
 - Typed diary.
-- Asynchronous or streaming audio processing.
+- Original transcript.
+- English translation.
+- Original audio retention.
+- Browse entries by date.
+- Open and view one entry.
+- Keyword search.
 
-They are kept visible without forcing them into the first build.
+## Current limits
+
+- Editing is disabled.
+- Open-and-edit may be added later if required.
+- Deletion uses soft delete rather than immediate permanent removal.
+- Summary generation is not currently listed as part of the agreed Version 1 promise.
+- Semantic search and the knowledge graph remain later stages.
+
+## Build sequence
+
+The main diary functionality comes first. Registration and login are built afterward within the Version 1 development cycle.
+
+Before the product is public, the account flow should support:
+
+- mandatory email;
+- OTP verification during registration;
+- login using username and password or email and password.
+
+## Conversation direction
+
+The desired end experience is a natural voice conversation where the AI asks relevant follow-up questions. Streaming is a strong direction for that experience, but it is not yet confirmed whether the first Version 1 implementation must be live streaming or can begin with recorded audio upload.
+
+## Hosting
+
+Prefer hosting on a friend's home system if it is practical and reliable. Use cloud hosting otherwise.

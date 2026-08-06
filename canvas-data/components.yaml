@@ -1,32 +1,40 @@
 components:
-  - name: Web interface
-    notebook_direction: React
-    purpose: Capture and browse memories
+  - name: Diary interface
+    purpose: Audio upload, recording, typed diary, date browsing, viewing, and keyword search
+    current_direction: Web interface first
 
-  - name: Mobile application
-    notebook_direction: Kotlin mentioned
-    purpose: Possible later mobile experience
+  - name: Conversation interface
+    purpose: AI-led voice conversation with relevant follow-up questions
+    current_direction: Streaming is strongly considered but the first transport is undecided
 
   - name: Backend service
     notebook_direction: Java
-    purpose: Accounts, memory workflows, retrieval, and storage coordination
+    purpose: Diary workflows, processing coordination, search, accounts, and storage
 
-  - name: AI processing
-    notebook_direction: Speech and language models
-    purpose: Transcription, translation, summary, and later entity detection
+  - name: External audio AI
+    current_direction: Google or another free API when suitable
+    purpose: Transcription, translation, and uncertainty output
 
-  - name: Relational storage
+  - name: Local AI model
+    stage: future
+    purpose: Replace or reduce dependence on external processing
+
+  - name: Relational source of truth
     notebook_direction: PostgreSQL
-    purpose: Users, sessions, entries, transcripts, and metadata
+    purpose: Users, sessions, diary items, text outputs, dates, confidence, and soft deletion
+
+  - name: Audio storage
+    choice: not_selected
+    purpose: Retain original audio
 
   - name: Vector search
-    notebook_direction: Vector database or vector capability
-    purpose: Semantic memory retrieval
+    stage: later
+    purpose: Semantic diary retrieval
 
   - name: Knowledge graph
-    notebook_direction: Graph database or graph layer
+    stage: later
     purpose: Connected memories, people, events, habits, and goals
 
-  - name: File storage
-    notebook_direction: Not selected
-    purpose: Original audio and future attachments
+  - name: Hosting environment
+    preferred: friend's home system if practical
+    fallback: cloud

@@ -2,39 +2,46 @@
 
 ## PostgreSQL
 
-The notebook names PostgreSQL for structured data. It may also be able to support some vector or JSON needs, but the notebook does not define the final setup.
+PostgreSQL remains the structured-data direction. It can hold the canonical user, diary, transcript, translation, processing, date, and soft-delete data.
 
-## Vector storage
+## Original audio
 
-A vector database or vector capability is part of the direction for semantic memory search.
+Original audio is retained. Its physical home still needs to be chosen:
 
-Open choice:
+- filesystem on the home host;
+- object storage;
+- cloud storage if the deployment moves to cloud.
 
-- dedicated vector product;
+The database should store a stable reference and metadata rather than treating an undocumented path as permanent architecture.
+
+## English text across storage layers
+
+The notebook asks for English transcription or translation to be available in all relevant database layers. The schema should first choose one canonical English representation, then define what is copied into search or graph stores. This is still a design choice, not a settled duplication rule.
+
+## Vector storage later
+
+Vector search is useful for semantic retrieval but is not part of the agreed Version 1 promise. Options remain:
+
 - vector support inside PostgreSQL;
+- a dedicated vector product;
 - a later-stage addition.
 
-## Knowledge graph storage
+## Knowledge graph later
 
-A graph database or knowledge-graph layer is part of the longer-term design.
+A graph layer remains part of the longer-term connected-memory direction. It should be introduced after the base diary and keyword search are working.
 
-Open choice:
+## Hosting direction
 
-- dedicated graph database;
-- graph-like tables in relational storage;
-- external graph service;
-- staged introduction after the base diary works.
+Preferred:
 
-## Audio and attachments
+1. A friend's home system, if it is practical and reliable.
+2. Cloud hosting as the fallback.
 
-Possible homes include:
+The deployment design still needs decisions for backups, public networking, TLS, uptime, file durability, and recovery.
 
-- local filesystem;
-- object storage;
-- storage provided by a hosted platform.
+## AI location
 
-The notebook mentions Supabase and local Docker as hosting or database options. Neither is selected here.
+- Current stage: Google or another free API may process audio.
+- Future direction: local model.
 
-## Local-first thought
-
-“Everything local” appears as a strong note. This canvas treats it as an important direction to discuss, not as an implementation fact, because remote access and hosted options also appear in the notebook.
+The architecture must make the provider replaceable and clearly identify what private data leaves the host.

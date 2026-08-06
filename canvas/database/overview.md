@@ -1,63 +1,71 @@
 # Database Overview
 
-The database canvas separates three different jobs rather than forcing everything into one model.
+The database canvas separates the original diary record from the later search and knowledge layers.
 
 ```mermaid
 flowchart LR
-    APP[AHAM services] --> SQL[(Relational data)]
-    APP --> VEC[(Semantic vectors)]
-    APP --> KG[(Memory graph)]
-    APP --> OBJ[(Audio and attachments)]
-
-    SQL --- VEC
-    SQL --- KG
-    SQL --- OBJ
+    APP[AHAM services] --> SQL[(Relational source of truth)]
+    APP --> OBJ[(Original audio storage)]
+    SQL --> VEC[(Semantic vectors later)]
+    SQL --> KG[(Memory graph later)]
 ```
 
-## Relational data
+## Diary concept
 
-Useful for users, sessions, diary entries, timestamps, transcripts, and attachment metadata.
+The user-facing product should use a simple diary-oriented name. Internally, the database and API still need a stable resource name. `DIARY_ENTRY` is used in this canvas only as a working concept, not as a final table decision.
 
-## Vector data
+## Relational source of truth
 
-Useful for finding memories with similar meaning even when the exact words differ.
+Useful for:
 
-## Graph data
+- users and sessions;
+- diary items and their dates;
+- original transcript;
+- English translation;
+- processing status and confidence;
+- soft deletion;
+- references to original audio.
 
-Useful for showing connections among people, events, habits, goals, and memories.
+## English representation across layers
 
-## File or object storage
+The latest note asks for English text to be available across the database or memory layers because it can support future ideas. Database design still needs to decide whether:
 
-Useful for source audio and future attachments.
+- PostgreSQL owns the canonical English text and other layers reference it;
+- derived stores copy only the fragments they need;
+- full English text is duplicated in each store.
+
+No duplication strategy is assumed here.
 
 ## Visual entity map
 
 ```mermaid
 erDiagram
     USER ||--o{ SESSION : has
-    USER ||--o{ MEMORY_ENTRY : owns
-    MEMORY_ENTRY ||--o{ TRANSCRIPT : produces
-    MEMORY_ENTRY ||--o{ ATTACHMENT : includes
-    MEMORY_ENTRY ||--o{ MEMORY_CONNECTION : connects
+    USER ||--o{ DIARY_ENTRY : owns
+    DIARY_ENTRY ||--o{ TEXT_VERSION : contains
+    DIARY_ENTRY ||--o| AUDIO_RECORD : keeps
+    DIARY_ENTRY ||--o{ COVERED_DATE : may_cover
+    DIARY_ENTRY ||--o{ ATTACHMENT : includes_later
 
     USER {
       string user_id
+      string username
       string email
-      string first_name
-      string last_name
     }
 
-    MEMORY_ENTRY {
+    DIARY_ENTRY {
       string entry_id
       datetime created_at
+      datetime deleted_at
       string input_kind
     }
 
-    TRANSCRIPT {
-      string transcript_id
-      string language_form
+    TEXT_VERSION {
+      string text_id
+      string text_kind
       text content
+      number confidence
     }
 ```
 
-`MEMORY_ENTRY` and `MEMORY_CONNECTION` are shown as helpful canvas concepts, not as notebook-confirmed table names. They make the diagram easier to discuss before a final schema exists.
+`DIARY_ENTRY`, `TEXT_VERSION`, and `COVERED_DATE` are discussion concepts for the upcoming schema design. Their final names and shapes require confirmation.

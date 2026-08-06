@@ -1,34 +1,50 @@
 # Feature Map
 
-## Capture
+## Version 1 capture
 
-- Voice diary.
+- Upload audio.
+- Record audio.
 - Typed diary.
-- Audio file input such as MP3 or WAV.
-- Attachments later: links, PDFs, images, and audio.
+- Add an entry for an earlier date.
+- Allow one diary item to describe more than one day.
 
-## Process
+## Version 1 processing
 
 - Original-language transcription.
 - English translation.
-- Quick summary for reading.
-- Later: detect events, entities, and relationships.
+- Preserve transcription confidence or other uncertainty information.
+- Keep the original audio.
 
-## Browse and search
+## Version 1 browse and search
 
-- Memories ordered by date.
-- Calendar-based retrieval.
-- Batch retrieval.
-- Open one full memory.
-- Search inside all memories.
-- Highlight the paragraph related to the search.
+- Browse diary entries by date.
+- Open and view one entry.
+- Keyword search.
+- Soft delete.
 
-## Personal memory model
+Editing is disabled initially. Open-and-edit remains a later conditional feature.
 
-- Connect related memories.
+## Account access
+
+- Mandatory email.
+- Email OTP during registration.
+- Login with username and password or email and password.
+- Account functionality is developed after the core diary flow.
+
+## Conversation direction
+
+- AI asks a natural opening question.
+- The user answers by voice.
+- AI asks a relevant follow-up based on what was said.
+- Streaming may support the real-person feeling.
+
+## Personal memory model later
+
+- Semantic or vector search.
+- Connect related diary entries.
 - Show how strongly memories are connected.
 - Build a knowledge graph gradually.
-- Use vector search for semantic similarity.
+- Detect events, entities, and relationships.
 
 ## Personal insights later
 
@@ -42,4 +58,4 @@
 
 ## High-care ideas
 
-The notebook also mentions doctor review and early mental-health signals. These are vision ideas, not current product promises. They need privacy, consent, safety, and professional-boundary decisions first.
+Doctor review and early mental-health signals remain vision ideas, not current product promises. They need privacy, consent, safety, and professional-boundary decisions first.

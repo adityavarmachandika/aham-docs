@@ -1,38 +1,54 @@
 # Authentication and Access
 
-Several authentication and remote-access possibilities appear in the notebook. They are kept as options rather than combined into a single invented design.
+The latest notes now define the base account flow more clearly.
 
-## Account flows mentioned
+## Registration
 
 ```mermaid
 flowchart LR
-    R[Register] --> V[Verify details]
-    V --> O[Email OTP verification]
-    O --> U[User account]
-
-    L[Login with email or ID and password] --> C[Verify credentials]
-    C --> T[Issue login token]
+    R[Register] --> E[Mandatory email]
+    E --> O[Send email OTP]
+    O --> V[Verify OTP]
+    V --> U[Create user account]
 ```
 
-Other notes mention Gmail sign-in.
+## Login
 
-## Account information mentioned
+```mermaid
+flowchart LR
+    C[Credentials] --> X{Login identifier}
+    X -->|Username| P[Username and password]
+    X -->|Email| M[Email and password]
+    P --> V[Verify]
+    M --> V
+    V --> S[Create session]
+```
 
-- First name.
-- Last name.
-- Email.
-- User ID or ID.
-- Password.
-- Name or username.
-- Age.
-- Phone number.
-- Possible nickname, summary, and date of birth.
+## Development order
 
-The required first-version fields are not fixed.
+The main diary functionality is built first. Login and registration are added afterward during Version 1 development.
+
+## User information
+
+Email is mandatory. The project also needs genuine user details to understand the person as diary data and the memory map grow.
+
+Fields seen in the notebook include:
+
+- username;
+- first name;
+- last name;
+- email;
+- password;
+- age or date of birth;
+- phone number;
+- nickname;
+- profile summary.
+
+The exact required and optional fields still need to be selected before the user table and registration contract are finalized.
 
 ## Sessions
 
-The notebook sketches:
+The earlier notebook sketches:
 
 - session ID;
 - user ID;
@@ -41,11 +57,6 @@ The notebook sketches:
 - device;
 - IP address.
 
-## Remote access ideas
+## Hosting and remote access
 
-- Open SSH, with a note that internet exposure is risky.
-- Tailscale.
-- WireGuard.
-- A home server or local deployment.
-
-No remote-access option has been selected in the notebook.
+The preferred host is a friend's home system if practical; cloud is the fallback. The exact public access, TLS, networking, backup, and operational setup remains to be designed.

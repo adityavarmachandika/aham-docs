@@ -1,19 +1,30 @@
 ideas:
-  active_direction:
-    - voice diary
-    - original and English transcripts
-    - source audio retention
-    - date-based browsing
-    - memory retrieval
-
-  next_possibilities:
-    - summaries
-    - memory search
-    - highlighted matching paragraphs
+  clarified_version_1:
+    - audio upload or recording
     - typed diary
+    - original transcript
+    - English translation
+    - original audio retention
+    - date browsing
+    - open and view one diary item
+    - keyword search
+    - soft deletion
+
+  conversational_direction:
+    - AI asks a natural opening question
+    - user answers by voice
+    - AI asks a follow-up based on the answer
+    - streaming may create a real-person feeling
+
+  conditional_or_next:
+    - open and edit a diary item if required
+    - summaries
+    - semantic search
+    - highlighted matching paragraphs
     - calendar queries
 
   later:
+    - local model
     - knowledge graph
     - entity and event detection
     - attachment support
@@ -22,24 +33,14 @@ ideas:
     - goals and progress
     - time-use analysis
     - mobile app
-    - remote access
 
   high_care:
     - doctor-facing life history
     - mental-health pattern flags
     - advice about daily actions
 
-  technology_options_seen:
-    - React
-    - Kotlin
-    - Java
+  current_options_seen:
+    - Google or free audio API
     - PostgreSQL
-    - vector database
-    - graph database
-    - Supabase
-    - local Docker
-    - Google APIs
-    - Whisper-like speech model
-    - SSH
-    - Tailscale
-    - WireGuard
+    - friend's home system
+    - cloud fallback
