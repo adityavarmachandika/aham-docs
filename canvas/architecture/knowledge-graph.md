@@ -1,10 +1,10 @@
-# Knowledge Graph
+# Knowledge Graph and Memory Engine
 
-The knowledge graph is the visual form of the “second brain” idea.
+The knowledge graph is a Phase 2 representation of the “second brain” idea.
 
 ```mermaid
 graph TD
-    M1[Memory: daily entry]
+    M1[Memory]
     P1[Person]
     E1[Event]
     H1[Habit]
@@ -20,27 +20,46 @@ graph TD
     M1 -->|connected with| M3
 ```
 
-## Notebook direction
+## Repeated memories become stronger
 
-The graph may begin with user text processed by an LLM. A later note adds more control:
+The notebook proposes that events, people, or relationships mentioned again and again become more strongly connected. Core memories may therefore stay more prominent while less active memories become weaker over time.
 
-1. Detect entities or relationships.
-2. Attach confidence.
-3. Review with a human or a rule.
-4. Approve important changes.
-5. Update the graph schema or graph.
+This is an idea for a future memory engine, not a settled scoring algorithm.
 
-This suggests a safer evolution than allowing every model output to rewrite the graph directly.
+## Possible memory variables
 
-## What the graph may represent
+The latest notes mention future variables such as:
 
-- People.
-- Places.
-- Events.
-- Habits.
-- Goals.
-- Topics.
-- Links between memories.
-- Strength created by repeated interactions or mentions.
+- importance;
+- emotional relevance;
+- memory decay;
+- repeated activity or repeated mentions that strengthen a memory.
 
-The node types, relationship types, and scoring rules remain open.
+The notebook also raises the idea of reconstructing or visualizing the user's mental model at a particular period in time. The presentation method and mathematical model are still open.
+
+## Evidence before graph changes
+
+A useful future principle appears in the notes: derived importance and graph changes should be tied back to actual evidence rather than generated without traceability.
+
+```mermaid
+flowchart TD
+    U[User message] --> T[Extract text]
+    T --> P[(Store source text)]
+    T --> E[Extract evidence]
+    E --> D[Generate derived observations]
+    D --> G[Update graph and metadata]
+```
+
+A future evidence record could preserve the source passage or transcript reference used to support a graph update. Exact tables, schemas, scoring, and approval rules remain undecided.
+
+## Safer graph evolution
+
+Existing notebook direction still applies:
+
+1. detect entities or relationships;
+2. attach confidence;
+3. preserve supporting evidence;
+4. review important changes through a human or rule when needed;
+5. update the graph.
+
+The graph should remain a derived model of source memories, not the only copy of the user's history.

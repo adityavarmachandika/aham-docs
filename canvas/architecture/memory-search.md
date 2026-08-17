@@ -1,6 +1,6 @@
 # Memory Search
 
-Memory search is the step from keeping a diary to building a useful memory system.
+Memory search is a Phase 2 step from keeping a diary to building a useful memory system.
 
 ```mermaid
 flowchart LR
@@ -11,24 +11,37 @@ flowchart LR
     K --> R[Ranked memories]
     V --> R
     G --> R
-    R --> H[Relevant day and highlighted passage]
+    R --> H[Relevant entry or highlighted passage]
 ```
 
 ## Search experiences in the notebook
 
-- Search across all stored files or memories.
+- Search across stored memories.
 - Retrieve a related memory from any day.
-- Return a set of transcripts for a calendar query.
+- Return transcripts for a calendar query.
 - Open one full transcript.
-- Highlight the paragraph most related to the search string.
+- Highlight the paragraph most related to a search string.
 
-## Search layers
+## Future vector flow
 
-The notebook supports the idea of combining:
+The latest notebook adds the basic vector-store lifecycle:
 
-- relational filters such as user and date;
-- text or keyword matching;
-- vector similarity for semantic memory;
-- knowledge-graph connections.
+```mermaid
+flowchart LR
+    T[Transcript or text chunk] --> E[Embedding model]
+    E --> I[Insert vector]
+    I --> V[(Vector store)]
+    Q[Search query] --> QE[Query embedding]
+    QE --> V
+    V --> R[Related memory references]
+    D[Delete source memory] --> X[Delete related vectors]
+    X --> V
+```
 
-The exact ranking method is not defined.
+Each stored vector needs metadata that can point back to the owning user and source transcript. The exact metadata schema and chunking rules are not fixed yet.
+
+## Spaces — future idea
+
+A later notebook idea proposes optional **spaces** for separating contexts inside one person's memory system. A user could keep a focused space for something like exam preparation, a project, or another important area instead of mixing every subject into one mental model.
+
+This is a future organizational idea, not an ADI requirement. It still needs decisions about whether spaces are manual, AI-created, isolated search scopes, graph partitions, or simply labels.

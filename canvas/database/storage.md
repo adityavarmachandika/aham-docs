@@ -1,47 +1,57 @@
 # Storage Options
 
-## PostgreSQL
+## Phase 1 — ADI
 
-PostgreSQL remains the structured-data direction. It can hold the canonical user, diary, transcript, translation, processing, date, and soft-delete data.
+PostgreSQL remains the structured-data direction for the diary source of truth. Original audio is retained and should be referenced from the relational data rather than treated as an undocumented permanent path.
 
-## Original audio
-
-Original audio is retained. Its physical home still needs to be chosen:
+Possible audio homes remain:
 
 - filesystem on the home host;
 - object storage;
-- cloud storage if the deployment moves to cloud.
+- cloud storage if deployment moves to cloud.
 
-The database should store a stable reference and metadata rather than treating an undocumented path as permanent architecture.
+## Phase 2 — Vector and memory storage
+
+The notebook now sketches two broad future directions for vector-enabled memory.
+
+### Cloud-oriented option
+
+Messages, transcripts, audio references, and derived memory data could live in a cloud architecture. The note explicitly raises end-to-end encryption as an important requirement if private memory data is stored remotely.
+
+### Local-device option
+
+A device such as Android could keep the user's memory data locally and run a smaller embedding model on-device. The attraction is privacy and speed. The clear trade-off noted in the notebook is reduced availability across the user's other devices unless a synchronization design is added later.
+
+These are alternatives to investigate, not selected architecture.
+
+## Vector lifecycle
+
+The notebook describes a simple lifecycle for a future vector store:
+
+1. insert vectors;
+2. query vectors;
+3. delete vectors.
+
+Each vector should carry enough metadata to trace it back to the source material. The handwritten note specifically mentions:
+
+- `user_id`;
+- transcript/transcription ID.
+
+The exact embedding model, vector database, chunking strategy, dimensions, distance metric, encryption scheme, and synchronization model are still open.
 
 ## English text across storage layers
 
-The notebook asks for English transcription or translation to be available in all relevant database layers. The schema should first choose one canonical English representation, then define what is copied into search or graph stores. This is still a design choice, not a settled duplication rule.
-
-## Vector storage later
-
-Vector search is useful for semantic retrieval but is not part of the agreed Version 1 promise. Options remain:
-
-- vector support inside PostgreSQL;
-- a dedicated vector product;
-- a later-stage addition.
+The notebook asks for English transcription or translation to be available to later memory layers. The database design should first choose one canonical English representation and then define what search or graph stores actually copy.
 
 ## Knowledge graph later
 
-A graph layer remains part of the longer-term connected-memory direction. It should be introduced after the base diary and keyword search are working.
+A graph layer remains part of Phase 2. It should be introduced after the diary foundation is reliable and should reference stable source records rather than replacing them.
 
 ## Hosting direction
 
 Preferred:
 
-1. A friend's home system, if it is practical and reliable.
-2. Cloud hosting as the fallback.
+1. A friend's home system, if practical and reliable.
+2. Cloud hosting as fallback.
 
-The deployment design still needs decisions for backups, public networking, TLS, uptime, file durability, and recovery.
-
-## AI location
-
-- Current stage: Google or another free API may process audio.
-- Future direction: local model.
-
-The architecture must make the provider replaceable and clearly identify what private data leaves the host.
+Future public deployment still needs decisions for backups, TLS, uptime, recovery, durable file storage, and privacy boundaries.
