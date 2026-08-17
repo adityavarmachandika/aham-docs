@@ -1,85 +1,217 @@
 # Database Entities
 
-This page records the shapes now visible before the detailed schema is designed.
+This document defines the current Phase 1 entity model. Exact SQL types, indexes, and JPA contracts are designed separately from these domain responsibilities.
 
 ## User
 
-Confirmed direction:
+Represents the AHAM account and frequently accessed profile data.
 
-- email is mandatory;
-- registration uses email OTP;
-- login supports username/password or email/password;
-- user details are needed to understand the person over time.
+Recommended fields:
 
-Fields mentioned across the notebook:
-
-- `user_id` or `id`;
+- `id`;
 - `username`;
 - `email`;
-- `password`;
-- `first_name`;
-- `last_name`;
-- `age` or `date_of_birth`;
-- `phone_number`;
-- `nickname`;
-- `profile_summary`.
+- `password_hash` (nullable for OAuth-only accounts);
+- `display_name`;
+- `date_of_birth`;
+- `timezone`;
+- `preferred_language`;
+- `locale`;
+- `email_verified_at`;
+- `status`;
+- `created_at`;
+- `updated_at`;
+- `deleted_at`.
 
-The required subset, optional subset, and the relationship between `id` and `user_id` are not yet finalized.
+Email and username are unique account identifiers. User understanding derived from memories belongs to Phase 2, not as an expanding set of columns on this table.
 
-## Diary item
+## Auth identity
 
-The visible product should call the concept something simple and diary-oriented. A working internal concept may contain:
+Links a user to an external authentication provider.
 
-- owner or user ID;
-- input kind: audio or typed;
-- created timestamp;
-- user-selected diary date;
-- one or more covered dates;
-- original audio reference;
-- original transcript;
-- English translation;
-- transcription confidence;
-- soft-delete timestamp.
+Representative fields:
 
-A user may add an item for an earlier date. One item may cover multiple days. The exact date fields and automatic date detection rules still need design.
+- `id`;
+- `user_id`;
+- `provider`;
+- `provider_subject`;
+- provider metadata when required;
+- `created_at`.
 
-## Text forms
+Google and Apple are planned Phase 1 providers.
 
-The Version 1 outputs are:
+## User session
 
-- original transcript;
-- English translation.
+Represents one authenticated device/session.
 
-A future model may also create summaries or corrected versions. Editing is currently disabled, so a user-edited text version is not required for the initial schema unless it is kept for future compatibility.
+Representative fields:
 
-## Audio record
+- `id`;
+- `user_id`;
+- `refresh_token_hash`;
+- `expires_at`;
+- `revoked_at`;
+- `user_agent` / device metadata;
+- `ip_address`;
+- `created_at`.
 
-Original audio is retained. The database needs metadata and a reference to where the file is stored. Exact audio metadata fields are not yet selected.
+## Auth token
 
-## Soft deletion
+Represents short-lived authentication workflows such as email verification and password reset.
 
-Entries are not removed immediately. A soft-delete mechanism is required. Restore period and permanent purge behavior are still open.
+Representative fields:
 
-## Attachments
+- `id`;
+- `user_id` or pending-registration reference;
+- `purpose`;
+- `token_hash` / OTP verification state;
+- `expires_at`;
+- `used_at`;
+- `created_at`.
 
-Later fields sketched:
+## Diary capture
 
-- attachment ID;
-- diary item reference;
-- attachment reference;
-- type;
-- size;
-- created-at time.
+Represents the draft/pre-finalization lifecycle of one diary entry.
 
-Examples include links, PDFs, images, and audio.
+One capture produces at most one finalized diary entry.
 
-## Sessions
+Representative fields:
 
-Fields sketched:
+- `id`;
+- `user_id`;
+- `status` (`ACTIVE`, `COMPLETED`, `ABANDONED`, `DELETED` or equivalent);
+- `input_kind` / capture metadata where useful;
+- `started_at`;
+- `timezone_at_start`;
+- `completed_at`;
+- `created_at`;
+- `updated_at`;
+- `deleted_at`.
 
-- session ID;
-- user ID;
-- refresh-token hash;
-- expiry;
-- device;
-- IP address.
+Captures may be resumed, and a user may have multiple unfinished captures.
+
+## Diary message / input
+
+Represents an ordered unit of input inside a capture.
+
+Phase 1 primarily records user input. The entity intentionally supports a role field so Phase 2 conversational AI can add assistant turns without changing the ownership model.
+
+Representative fields:
+
+- `id`;
+- `capture_id`;
+- `sequence_no`;
+- `role` (`USER`, later `ASSISTANT`);
+- `text` for typed input or model messages;
+- `created_at`.
+
+A message may have zero or many attachments.
+
+## Attachment
+
+Represents one binary object associated with a diary message.
+
+Representative fields:
+
+- `id`;
+- `user_id`;
+- `message_id`;
+- `type` (`AUDIO`, later `IMAGE`, `VIDEO`, `DOCUMENT`, etc.);
+- `mime_type`;
+- `storage_provider`;
+- `storage_bucket` / namespace;
+- `storage_key`;
+- `original_filename` when useful;
+- `size_bytes`;
+- audio duration when applicable;
+- `status`;
+- provider/file metadata (`JSONB` where appropriate);
+- `created_at`;
+- `deleted_at`.
+
+The permanent source-of-truth reference is the storage provider + object key, not a public URL.
+
+## Transcript
+
+Represents the durable transcription result of an audio attachment.
+
+Representative fields:
+
+- `id`;
+- `attachment_id`;
+- `original_text`;
+- `source_language`;
+- mixed-language metadata when useful;
+- `english_translation` (nullable when source is already English);
+- `overall_confidence`;
+- `provider`;
+- `model`;
+- provider metadata;
+- processing timestamps.
+
+Phase 1 stores the final transcript, not every partial streaming hypothesis.
+
+## Diary entry
+
+Represents the finalized user-facing diary.
+
+Representative fields:
+
+- `id`;
+- `user_id`;
+- `capture_id`;
+- `diary_date`;
+- `recorded_at`;
+- `timezone_at_recording`;
+- `title` (optional, normally AI-generated);
+- `cleaned_english_text`;
+- `summary`;
+- `finalized_at`;
+- `created_at`;
+- `deleted_at`;
+- purge/recovery metadata as needed.
+
+Finalized diary content is not user-editable in Phase 1.
+
+`diary_date` is an organizational date, not a one-entry-per-day key. Multiple entries may have the same date.
+
+## Covered date range
+
+Represents dates discussed within an entry, independently of when the diary was recorded or where it is shown in the calendar.
+
+Representative fields:
+
+- `id`;
+- `diary_entry_id`;
+- `date_from`;
+- `date_to`;
+- `source` (`USER`, later `AI`);
+- `confirmed`;
+- `confidence` for future inferred values;
+- `created_at`.
+
+One entry may have several non-contiguous covered ranges.
+
+## Processing job
+
+Represents asynchronous work and retry state when an external/local processor is used.
+
+Representative fields:
+
+- `id`;
+- owning resource reference;
+- `job_type`;
+- `status`;
+- `attempt_count`;
+- provider/model metadata;
+- failure code/message;
+- `created_at`;
+- `started_at`;
+- `completed_at`;
+- retry scheduling metadata when needed.
+
+The exact job implementation may later move to a dedicated queue, but durable domain processing state should remain observable.
+
+## Phase 2 source references
+
+Future memory facts, embeddings, and graph relationships should retain provenance through source IDs such as `diary_entry_id`, `message_id`, or `transcript_id`. A vector is a retrieval representation; provenance explains why a derived memory exists.

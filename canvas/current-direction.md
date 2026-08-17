@@ -1,46 +1,65 @@
 # Current Direction
 
-## Development phases
+This document records the current engineering direction for AHAM. Historical notebook ideas remain available in the archive, but the decisions below are the active specification.
 
-### Phase 1 / Version 1 — ADI
+## Product boundary
 
-**ADI — Audio Diary Initiative** is the current development phase.
+### Phase 1 — ADI
 
-All Phase 1 development is related to the diary product and the foundation of the application. It includes the CRUD, authentication, storage, processing, and API capabilities required to make the diary dependable.
+Build a dependable private diary system with:
 
-### Phase 2 — Second brain
+- audio and typed input;
+- source preservation;
+- transcription and English translation;
+- faithful cleaned-English output;
+- summary and optional title;
+- date-based browsing and keyword search;
+- immutable finalized entries;
+- soft delete, restore, and purge;
+- users, verification, authentication, sessions, storage, and processing infrastructure.
 
-Second-brain functionality begins only after ADI is complete. This includes semantic search, knowledge graphs, connected memories, personal patterns, dashboards, reminders, and deeper insights.
+### Phase 2 — memory intelligence
 
-## ADI product shape
+Introduce natural AI conversation, semantic search, connected memories, evidence-backed user understanding, knowledge graphs, and local/on-device intelligence only after the diary foundation is stable.
 
-- The product is intended to become public as it matures.
-- The experience should feel like a diary or trusted friend.
-- Audio and typed diary input are part of the base.
-- Original audio, original transcript, and English translation are retained.
-- Entries can be browsed by date, viewed individually, and searched by keyword.
-- Backdated and multi-day entries are supported conceptually.
-- Soft deletion is required.
-- User accounts and authentication are part of the Phase 1 foundation.
+## Interaction model
 
-## ADI account direction
+Phase 1 captures what the user chooses to say or type. It does not require the AI to understand and respond conversationally in real time.
 
-- Email is mandatory.
-- Registration uses email OTP verification.
-- Login may use username/password or email/password.
-- Authentication is developed after the core diary flow, but remains inside Phase 1.
+Conversational behavior is a Phase 2 capability. The future interaction level may be configurable, including an effectively non-interactive mode and progressively deeper follow-up behavior.
 
-## ADI AI direction
+## Diary semantics
 
-- An external Google or other free API may be used initially for audio processing.
-- A local model is a later direction.
-- Transcription confidence and uncertainty should be retained.
-- Conversational follow-up and streaming are diary-experience possibilities, but their exact Phase 1 increment is still to be decided.
+AHAM does not assume one diary entry per day.
 
-## CRUD clarification still required
+A user may create zero, one, or many entries on a given date. The system records:
 
-The project now states that Phase 1 covers CRUD foundations. An earlier note said editing is disabled. The update boundary must therefore be confirmed before database and API contracts are finalized.
+- actual capture start time;
+- capture timezone;
+- diary/calendar date;
+- one or more covered date ranges mentioned by the user.
 
-## Hosting direction
+Backdating is a first-class capability, not an edge case.
 
-Prefer a friend's home system if practical and reliable. Cloud hosting is the fallback.
+## Content policy
+
+The source content is preserved. Phase 1 keeps finalized diary content immutable from the user's perspective.
+
+Derived cleaned English exists to express the user's meaning clearly, not to reinterpret the user's history. The system may improve grammar and readability, but it must not add unsupported facts or motivations.
+
+## Technical direction
+
+- React web client first;
+- Java / Spring Boot backend;
+- Python may be used for AI-related processing;
+- PostgreSQL as structured source of truth;
+- private object storage for audio and future attachments;
+- storage access hidden behind an application abstraction so Cloudflare R2 and local/self-hosted options remain interchangeable;
+- asynchronous processing and retries where appropriate;
+- initial operating target of roughly 1,000 users.
+
+## Privacy direction
+
+Phase 1 should use private objects, short-lived access URLs, TLS, strict ownership checks, and encryption at rest.
+
+A future local-only mode where memories never leave the user's device remains a strategic direction. True end-to-end encrypted multi-device synchronization requires a dedicated key and recovery design and is intentionally not treated as solved by the Phase 1 server architecture.

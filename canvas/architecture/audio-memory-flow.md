@@ -1,55 +1,95 @@
-# Audio and Conversation Flow
+# Audio and Processing Flow
 
-The immediate product must accept audio. The larger goal is a conversational diary that feels natural rather than like a form.
+Phase 1 captures user input and produces durable diary representations. It does not require conversational AI.
 
-## Version 1 processing flow
+## Capture flow
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant Interface
-    participant Backend
-    participant AudioAI as Audio AI provider
-    participant Storage
+    participant Client
+    participant API
+    participant Store as Object Storage
+    participant Processor
+    participant DB
 
-    User->>Interface: Upload or record audio
-    Interface->>Backend: Send audio
-    Backend->>Storage: Keep original audio
-    Backend->>AudioAI: Request transcription
-    AudioAI-->>Backend: Original transcript and confidence
-    Backend->>AudioAI: Request English translation
-    AudioAI-->>Backend: English translation
-    Backend->>Storage: Save diary outputs
-    Backend-->>Interface: Show saved diary entry
+    User->>Client: Record or select audio
+    Client->>API: Create diary capture/input
+    API->>DB: Persist capture metadata
+    API-->>Client: Upload authorization
+    Client->>Store: Upload audio
+    Client->>API: Confirm upload
+    API->>Processor: Start processing
+    Processor-->>API: Final transcript + confidence
+    Processor-->>API: English translation if needed
+    Processor-->>API: Cleaned English
+    Processor-->>API: Summary + optional title
+    API->>DB: Persist outputs
 ```
 
-## Desired conversational direction
+## Source preservation
 
-```mermaid
-sequenceDiagram
-    participant AI
-    participant User
+The original audio is retained for the lifetime of the diary entry. Deleting the diary entry deletes the entire memory package through the soft-delete and purge lifecycle.
 
-    AI->>User: Ask a natural question
-    User-->>AI: Answer by voice
-    AI->>AI: Understand the answer and uncertainty
-    AI->>User: Ask a relevant follow-up
-    User-->>AI: Continue the diary conversation
-```
+The database stores attachment metadata and provider-independent object references. Binary audio remains in private object storage.
 
-## Current AI direction
+## Transcript contract
 
-- Use a Google or other free API for audio processing when a suitable option is available.
-- Prefer streaming where it supports the conversational experience.
-- Move toward a local model in the future.
-- Store or expose transcription confidence and other uncertainties.
+Only the final transcript is stored as the normal durable transcript. Intermediate streaming/partial hypotheses are not part of the Phase 1 source-of-truth model.
 
-## Still open for API design
+Transcript data should preserve:
 
-- Does Version 1 send a completed recording as one upload, or stream live audio?
-- If both are supported, which is built first?
-- Is processing synchronous, asynchronous, or a mix?
-- What are the maximum audio duration and file size?
-- Which audio formats are accepted?
-- What happens when the provider disconnects or returns a partial result?
-- Where exactly is original audio stored?
+- original-language text;
+- source/primary language;
+- detected mixed-language metadata when useful;
+- overall confidence when supplied by the provider;
+- provider/model metadata for traceability.
+
+If the source is already English, a duplicate English translation is unnecessary.
+
+## English and cleaned representations
+
+For non-English or mixed-language input, AHAM stores a faithful English translation.
+
+The cleaned-English representation is a separate derived form. Its objective is to express what the user intended to communicate as clearly as possible while preserving meaning.
+
+Allowed transformations include:
+
+- grammar correction;
+- filler removal;
+- accidental repetition cleanup;
+- sentence restructuring;
+- obvious speech-to-text repair;
+- natural English rendering of mixed-language speech.
+
+Not allowed:
+
+- adding facts not present in the source;
+- guessing emotions or motivations as facts;
+- inventing people, dates, places, events, causes, or intentions;
+- silently resolving uncertainty in a way that changes meaning.
+
+The original source remains available whenever derived text is questioned.
+
+## Summary
+
+The summary is intentionally lossy and is used for quick reading and later context selection. It must not replace the full cleaned representation as the canonical AI-readable form.
+
+## Processing failure
+
+Source preservation takes priority over derived processing.
+
+If transcription or later AI processing fails:
+
+- keep the original audio/input;
+- preserve processing state and failure information;
+- retry asynchronously where appropriate;
+- do not lose the user's memory because a provider is unavailable.
+
+A diary may be shown using the best completed representation available while remaining derived outputs finish later.
+
+## Streaming direction
+
+Continuous live AI conversation is not required for Phase 1. Initial implementation may use completed audio clips/uploads while keeping transport details outside the core data model.
+
+Phase 2 may replace or extend the transport with streaming without changing ownership of diary sources and attachments.
