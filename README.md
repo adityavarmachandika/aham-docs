@@ -1,54 +1,89 @@
-# AHAM — Personal Diary and Memory Canvas
+# AHAM
 
-AHAM is being built in phases.
+AHAM is a private, diary-first personal memory system. Its first responsibility is simple: help a person capture what they want to remember, preserve the original evidence, and make those memories easy to return to later.
 
-## Current phase
+> **Product principle:** Don't cheat your own brain. Stay true to yourself.
 
-**Phase 1 / Version 1: ADI — Audio Diary Initiative**
+AHAM is developed incrementally. The early product is intentionally narrower than the long-term vision.
 
-ADI is the diary foundation of the application. All development in this phase is focused on the diary experience and the core CRUD capabilities needed to support it.
+## Phase 1 — ADI
 
-Phase 2 will introduce the second-brain features such as semantic memory, knowledge graphs, connected memories, patterns, and deeper personal insights.
+**ADI — Audio Diary Initiative** establishes the dependable diary foundation.
 
-> **Guiding thought:** Don't cheat your own brain. Stay true to yourself.
+Phase 1 supports:
 
-This GitBook is a living canvas, not a formal specification. It keeps the current scope, architecture sketches, database thoughts, diagrams, questions, and future ideas in one place.
+- audio recording and audio upload;
+- typed diary input;
+- original audio retention;
+- original-language transcription;
+- English translation when required;
+- a faithful cleaned-English representation;
+- an AI-generated summary and optional title;
+- browsing entries by diary date;
+- multiple entries on the same date;
+- backdated entries;
+- entries that refer to one or more historical date ranges;
+- keyword search;
+- immutable finalized diary content;
+- soft deletion, restore, and 30-day purge;
+- user accounts, email verification, authentication, and sessions;
+- private attachment storage and processing foundations.
 
-## ADI at a glance
+Phase 1 does **not** require conversational AI. Audio is captured as user input and processed after capture. Natural AI follow-up conversations belong to the next phase.
+
+## Phase 2 — Memory and conversation
+
+After the diary foundation is reliable, AHAM can expand into a more active personal memory system:
+
+- conversational diary interactions;
+- semantic/vector search;
+- connected memories and knowledge graphs;
+- evidence-backed user facts and relationships;
+- people, places, events, goals, habits, and recurring themes;
+- local/on-device processing and stronger privacy modes;
+- deeper personal context and insights.
+
+Phase 2 systems must reference stable Phase 1 source records rather than replace the original diary history.
+
+## Core data principle
+
+AHAM distinguishes between **source evidence** and **derived representations**.
 
 ```mermaid
 flowchart LR
-    U[User] --> D[Create diary entry]
-    D --> A[Audio or typed input]
-    A --> P[Transcribe and translate]
-    P --> S[Store diary data]
-    S --> B[Browse by date]
-    S --> V[View one entry]
-    S --> K[Keyword search]
-    S --> X[Update or manage diary data]
-    S --> R[Soft delete and restore flow]
+    I[User input] --> O[Original source]
+    O --> T[Transcript or typed text]
+    T --> E[English representation]
+    E --> C[Cleaned English]
+    C --> S[Summary]
+    O --> D[Diary entry]
+    C --> D
+    S --> D
 ```
 
-## Phase boundary
+The original audio/text is the source of truth. Cleaned text may improve grammar, remove filler, repair obvious transcription artifacts, and make mixed-language input readable, but it must not invent facts, emotions, dates, people, causes, or intentions.
 
-```mermaid
-flowchart LR
-    P1[Phase 1 — ADI
-Diary foundation and CRUD] --> P2[Phase 2
-Second-brain features]
-```
+## Current technical direction
 
-## What this canvas contains
+- **Web:** React
+- **Backend:** Java / Spring Boot
+- **AI processing:** separate service where useful, likely Python
+- **Primary database:** PostgreSQL
+- **Object storage:** private S3-compatible/object storage; Cloudflare R2 is the current cloud direction, with local/self-hosted storage kept possible behind an abstraction
+- **Initial scale target:** approximately 1,000 users
+
+## Documentation map
 
 - [Vision](canvas/vision.md)
-- [Project map](canvas/project-map.md)
 - [Phase 1 — ADI](canvas/phase-1-adi.md)
-- [Current direction](canvas/current-direction.md)
-- [Version 1](canvas/version-1.md)
-- [Feature map](canvas/feature-map.md)
-- [Architecture](canvas/architecture/system-overview.md)
-- [Database](canvas/database/overview.md)
-- [Later ideas](canvas/later-ideas.md)
-- [Things to think about](canvas/things-to-think-about.md)
+- [System architecture](canvas/architecture/system-overview.md)
+- [Audio and processing flow](canvas/architecture/audio-memory-flow.md)
+- [Authentication and access](canvas/architecture/auth-and-access.md)
+- [Database overview](canvas/database/overview.md)
+- [Database entities](canvas/database/entities.md)
+- [Storage](canvas/database/storage.md)
+- [Phase 2 ideas](canvas/later-ideas.md)
+- [Open engineering decisions](canvas/things-to-think-about.md)
+- [Notebook archive](canvas/notebook-notes.md)
 
-New notebook pages can be added gradually. Git keeps the detailed history while the website stays simple and easy to scan.
+The notebook archive records the origin of ideas. The documents above are the current product and engineering specification.

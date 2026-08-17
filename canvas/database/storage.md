@@ -1,57 +1,88 @@
-# Storage Options
+# Storage
 
-## Phase 1 — ADI
+AHAM keeps structured diary metadata in PostgreSQL and binary user content in private object storage.
 
-PostgreSQL remains the structured-data direction for the diary source of truth. Original audio is retained and should be referenced from the relational data rather than treated as an undocumented permanent path.
+## Storage abstraction
 
-Possible audio homes remain:
+Application code should depend on a provider-neutral storage interface rather than Cloudflare-specific URLs or APIs.
 
-- filesystem on the home host;
-- object storage;
-- cloud storage if deployment moves to cloud.
+Conceptually:
 
-## Phase 2 — Vector and memory storage
+```text
+ObjectStorage
+  - createUploadTarget(...)
+  - createDownloadTarget(...)
+  - deleteObject(...)
+  - verifyObject(...)
+```
 
-The notebook now sketches two broad future directions for vector-enabled memory.
+Possible implementations include:
 
-### Cloud-oriented option
+- Cloudflare R2;
+- local filesystem for development or controlled self-hosting;
+- S3-compatible local/object storage;
+- another cloud provider later.
 
-Messages, transcripts, audio references, and derived memory data could live in a cloud architecture. The note explicitly raises end-to-end encryption as an important requirement if private memory data is stored remotely.
+The database stores durable object identity such as:
 
-### Local-device option
+- storage provider;
+- bucket/namespace;
+- object key;
+- content type;
+- size and relevant metadata.
 
-A device such as Android could keep the user's memory data locally and run a smaller embedding model on-device. The attraction is privacy and speed. The clear trade-off noted in the notebook is reduced availability across the user's other devices unless a synchronization design is added later.
+A public URL is not the permanent object identifier.
 
-These are alternatives to investigate, not selected architecture.
+## Privacy model
 
-## Vector lifecycle
+Diary attachments are private by default.
 
-The notebook describes a simple lifecycle for a future vector store:
+Clients receive temporary authorized access rather than permanent public object URLs. Ownership must be checked before download authorization is issued.
 
-1. insert vectors;
-2. query vectors;
-3. delete vectors.
+The Phase 1 privacy baseline includes:
 
-Each vector should carry enough metadata to trace it back to the source material. The handwritten note specifically mentions:
+- TLS in transit;
+- encryption at rest;
+- private buckets/objects;
+- short-lived signed access;
+- strict service permissions;
+- deletion of objects when the associated diary memory is permanently purged.
 
-- `user_id`;
-- transcript/transcription ID.
+## Audio lifecycle
 
-The exact embedding model, vector database, chunking strategy, dimensions, distance metric, encryption scheme, and synchronization model are still open.
+Phase 1 retains original audio for the lifetime of the diary memory.
 
-## English text across storage layers
+```mermaid
+flowchart LR
+    C[Capture] --> A[Private audio object]
+    A --> P[Process]
+    P --> T[Transcript and derived text]
+    D[Soft delete diary] --> R[30-day retention]
+    R -->|Restore| C
+    R -->|Expire| X[Purge DB data and audio object]
+```
 
-The notebook asks for English transcription or translation to be available to later memory layers. The database design should first choose one canonical English representation and then define what search or graph stores actually copy.
+Individual audio deletion while preserving the diary is not part of the initial product contract.
 
-## Knowledge graph later
+## Upload lifecycle
 
-A graph layer remains part of Phase 2. It should be introduced after the diary foundation is reliable and should reference stable source records rather than replacing them.
+An attachment may have a database record before the binary upload is complete. Storage state should therefore distinguish states such as pending, uploaded/ready, failed, and deleted.
 
-## Hosting direction
+Abandoned uploads should be eligible for cleanup.
 
-Preferred:
+## Future attachment types
 
-1. A friend's home system, if practical and reliable.
-2. Cloud hosting as fallback.
+The same attachment model is intended to support:
 
-Future public deployment still needs decisions for backups, TLS, uptime, recovery, durable file storage, and privacy boundaries.
+- images;
+- PDFs and documents;
+- video;
+- other binary diary context.
+
+Media-specific metadata belongs in normal columns when frequently queried and in structured metadata/JSON when it is type-specific and optional.
+
+## Local-only future direction
+
+A later AHAM mode may keep memories, embeddings, and models entirely on the user's device. This is separate from the Phase 1 server storage model.
+
+Local-only privacy introduces different trade-offs for backup, device loss, and multi-device synchronization. The Phase 1 schema should preserve clean identifiers and exportable source records but should not pretend that these future cryptographic/synchronization decisions are already solved.
